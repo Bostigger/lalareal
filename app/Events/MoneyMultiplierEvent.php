@@ -11,20 +11,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class UserSessionChanged implements ShouldBroadcast
+class MoneyMultiplierEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
-    public $messageType;
     /**
      * Create a new event instance.
      */
-    public function __construct($message,$messageType)
+    public $multiplier;
+    public $money;
+
+    public function __construct($multiplier,$money)
     {
-        //
-        $this->message = $message;
-        $this->messageType = $messageType;
+        $this->multiplier = $multiplier;
+        $this->money = $money;
     }
 
     /**
@@ -34,11 +34,9 @@ class UserSessionChanged implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-
-
+        Log::debug($this->money*$this->multiplier);
         return [
-
-            new PrivateChannel('notifications'),
+            new Channel('game'),
         ];
     }
 }
