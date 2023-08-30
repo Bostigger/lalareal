@@ -2,5 +2,5 @@
 
 ## About Larareal
 
-A basic real-time notification implementation in laravel.
+A  real-time implementations in laravel.
 
