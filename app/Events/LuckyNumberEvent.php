@@ -11,20 +11,17 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class UserSessionChanged implements ShouldBroadcast
+class LuckyNumberEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
-    public $messageType;
     /**
      * Create a new event instance.
      */
-    public function __construct($message,$messageType)
+    public $number;
+    public function __construct($number)
     {
-        //
-        $this->message = $message;
-        $this->messageType = $messageType;
+        $this->number=$number;
     }
 
     /**
@@ -34,11 +31,9 @@ class UserSessionChanged implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-
-
+        Log::debug("Lucky number is ".$this->number);
         return [
-
-            new PrivateChannel('notifications'),
+            new Channel('game'),
         ];
     }
 }
