@@ -25,7 +25,7 @@
                     <div id="game" class="flex flex-col justify-center items-center">
                         <img id="circle"  src="{{asset('/images/circle.png')}}" alt="" style="height:300px;">
                         <p id="winner" class="display-1 d-none text-white"></p>
-                        <div>
+                        <div class="flex flex-col justify-center items-center">
                             <br>
                             <label for="option">Pick a number</label> <br>
                             <select style="color: black" name="" id="bet">
@@ -34,13 +34,13 @@
                                     <option  value="{{$num}}">{{$num}}</option>
                             @endforeach
                             </select>
-                            <br><br>
                             <hr>
                             <p class="font-bold text-xl">Remaining Time</p>
                             <p id="timer" style="color:#97f559;" class="font-bold text-xl ">Waiting to start</p>
                             <hr>
                             <p id="winner" class="text-2xl"></p>
                             <p id="result" class="text-xl"></p>
+                            <p id="cash" class="text-2xl text-danger"></p>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,15 @@
             const winner = document.getElementById('winner');
             const bet = document.getElementById('bet');
             const result = document.getElementById('result');
-
+            const cash = document.getElementById('cash');
+            let currentScore = localStorage.getItem('score');
+            console.log(currentScore)
+            if (!currentScore) {
+                localStorage.setItem('score', 0);
+                currentScore = localStorage.getItem('score');
+                console.log(currentScore)
+            }
+            cash.innerText = currentScore;
             if (window.Echo) {
                 window.Echo.channel('game')
                     .listen('RemainingTimeEvent', (e) => {
@@ -65,7 +73,8 @@
                         winner.classList.add('d-none');
                         result.innerText = '';
                         winner.innerText = '';
-
+                        cash.innerText = currentScore;
+                        console.log(currentScore)
                     })
                     .listen('LuckyNumberEvent', (e) => {
                         roulete.classList.remove('game-roulete');
@@ -74,12 +83,22 @@
                         winner.classList.remove('d-none');
                         let betVal = bet[bet.selectedIndex].value;
                         console.log(betVal)
+                        console.log(currentScore)
                         if (betVal == winNumber) {
-                            result.innerText = 'You Win';
+                             result.innerText = 'You Win';
+                             localStorage.setItem('score', parseInt(5)+parseInt(currentScore));
+                             currentScore = localStorage.getItem('score');
+                             cash.innerText= currentScore;
+                            console.log(currentScore)
                         } else {
                             result.innerText = 'You Lose';
+                            if (currentScore > 0) {
+                                localStorage.setItem('score', parseInt(parseInt(5) - 5));
+                                currentScore = localStorage.getItem('score');
+                                cash.innerText = currentScore;
+                            }
+                            console.log(currentScore)
                         }
-
                     });
             }
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\UserCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -57,10 +58,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->all();
-        $data['password'] = bcrypt($request->password);
-        $user ->fill($data);
-        $user->save();
-        return User::create($data);
+        return $user -> update($data);
     }
 
     /**
