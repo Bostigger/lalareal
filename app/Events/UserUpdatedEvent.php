@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,20 +12,17 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class MoneyMultiplierEvent implements ShouldBroadcast
+class UserUpdatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-
-    public $money;
-
-    public function __construct($money)
+    public $user;
+    public function __construct(User $user)
     {
-
-        $this->money = $money;
+        $this->user=$user;
     }
 
     /**
@@ -34,9 +32,9 @@ class MoneyMultiplierEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug($this->money);
+        Log::debug("Update user {$this->user->name}");
         return [
-            new Channel('game'),
+            new Channel('users'),
         ];
     }
 }

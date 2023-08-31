@@ -27,23 +27,31 @@ class GameExcuter extends Command
     protected $description = 'Starts the game and executes the game logic';
 
     private $time = 15;
+    private $multiplier = 2;
+    private $money = 15;
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
-
+        $takeHome = $this->money; //100
        while (true){
+
+           $takeHome = $this->multiplier * $takeHome; //500
            broadcast(new RemainingTimeEvent($this->time));
-           broadcast(new MoneyMultiplierEvent(5,100));
+           broadcast(new MoneyMultiplierEvent($takeHome));
            sleep(1);
+
            $this->time--;
            if ($this->time===0){
                $this->time="Waiting for next round";;
                broadcast(new RemainingTimeEvent($this->time));
                broadcast(new LuckyNumberEvent(mt_rand(1,12)));
+               broadcast(new MoneyMultiplierEvent($takeHome));
                sleep(3);
                $this->time=15;;
+               $takeHome=$this->money;
            }
        }
 
