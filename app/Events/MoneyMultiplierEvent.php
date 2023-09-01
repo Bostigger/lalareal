@@ -21,10 +21,12 @@ class MoneyMultiplierEvent implements ShouldBroadcast
 
     public $money;
 
+
     public function __construct($money)
     {
 
         $this->money = $money;
+
     }
 
     /**
@@ -34,7 +36,7 @@ class MoneyMultiplierEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug($this->money);
+         Log::debug($this->money);
         return [
             new Channel('game'),
         ];

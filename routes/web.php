@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group( function (){
     Route::view('/users','users.show-users');
     Route::view("/game","game.show-game");
+    Route::post('/play-game',[GameController::class,'GambleNow']);
     Route::get("/chat",[ChatController::class,"ShowChat"]);
     Route::post("/send-message",[ChatController::class,"SendMessage"])->name("send.message");
 });

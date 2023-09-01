@@ -17,7 +17,7 @@ class GameExcuter extends Command
      * @var string
      */
 
-    protected $signature = 'game:execute';
+    protected $signature = 'game:execute {money}{multiplier}';
 
     /**
      * The console command description.
@@ -27,14 +27,16 @@ class GameExcuter extends Command
     protected $description = 'Starts the game and executes the game logic';
 
     private $time = 15;
-    private $multiplier = 2;
-    private $money = 15;
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
+        $this->money = $this->argument('money');
+        $this->multiplier = $this->argument('multiplier');
+        Log::debug($this->money);
+        Log::debug($this->multiplier);
         $takeHome = $this->money; //100
        while (true){
 
@@ -52,6 +54,7 @@ class GameExcuter extends Command
                sleep(3);
                $this->time=15;;
                $takeHome=$this->money;
+               break;
            }
        }
 
